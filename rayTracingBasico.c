@@ -38,8 +38,6 @@ ESFERA *esferas[OBJ_C];
 #define BCKGR_G 0 //Colores del background [negro]
 #define BCKGR_B 0
 
-int cantidad_objetos = 0;
-
 
 int main(int argc, char** argv){ //main del programa
     COORD=fopen ("objetosEscena.txt","r");
@@ -63,7 +61,7 @@ int main(int argc, char** argv){ //main del programa
   	return 1;
 }
 
-void dibujar_escena(){
+void dibujar_escena(){ //dibuja el framebuffer, mediante el uso de glut
     int i , j;
     for (i = 0; i < H_SIZE; i++){
         for (j = 0; j < V_SIZE; j++){
@@ -83,16 +81,16 @@ void dibujar_escena(){
 
 void guardar_imagen(){
   int i, j;
-  FILE *fp = fopen("RayTrace-Esquivel-López-Murillo-Jiménez.ppm", "wb"); /* b - binary mode */
+  FILE *fp = fopen("RayTrace-Esquivel-López-Murillo-Jiménez.ppm", "wb"); //funcion encargada de pasar el framebuffer a formato Netpbm en su tipo Portable Pixmap. Las imagenes output son Raster
   (void) fprintf(fp, "P6\n%d %d\n255\n", H_SIZE, V_SIZE);
   for (j = 0; j < V_SIZE; ++j)
   {
     for (i = 0; i < H_SIZE; ++i)
     {
       static unsigned char color[3];
-      color[0] = buffer[i][j].r;  /* red */
-      color[1] = buffer[i][j].g;  /* green */
-      color[2] = buffer[i][j].b;  /* blue */
+      color[0] = buffer[i][j].r; 
+      color[1] = buffer[i][j].g;  
+      color[2] = buffer[i][j].b;  
       (void) fwrite(color, 1, 3, fp);
     }
   }
@@ -120,7 +118,7 @@ void crear_buffer(){ //funcion encargada de liberar memoria y de crear el frameb
    }
 }
 
-void crear_objetos_escena(){
+void crear_objetos_escena(){//funcion que crea los objetos, leyendo los parametros del archivo objetosEscena.txt y los almacena en structs
     rewind(COORD);
     int i;
     for(i =0; i < LUZ_C; i++){ //almacena las luces en un sruct
@@ -158,7 +156,7 @@ void crear_objetos_escena(){
     }
 }
 
-void ray_tracing(){
+void ray_tracing(){//funcion main del ray tracing
     int x,y;
     for(x = 0; x < H_SIZE; x++){
         for(y = 0; y < V_SIZE; y++){
@@ -177,7 +175,7 @@ void ray_tracing(){
     }
 }
 
-double calcular_angulo(double AX, double AY, double AZ, double BX, double BY, double BZ){
+double calcular_angulo(double AX, double AY, double AZ, double BX, double BY, double BZ){ //dado dos vectores, calcula el angulo de estos
         double producto_escalar = (AX*BX)+(AY*BY)+(AZ*BZ);
         //printf(" Producto Escalar = %f",producto_escalar);
         double modulo_A = sqrt(pow(AX,2) + pow(AY,2) + pow(AZ,2));
